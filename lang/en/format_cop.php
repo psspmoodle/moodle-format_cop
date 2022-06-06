@@ -31,3 +31,4 @@ $string['descriptorlesson'] = 'Lesson: ';
 $string['descriptorsubsection'] = 'Subsection: ';
 $string['progresstext'] = 'Progress';
 $string['mainpage'] = 'Main page';
+$string['coppage'] = 'COP page';
