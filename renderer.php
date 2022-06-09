@@ -8,6 +8,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use format_cop\output\most_liked_posts;
+use format_cop\output\recent_posts;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/format/renderer.php');
@@ -26,7 +29,8 @@ class format_cop_renderer extends format_section_renderer_base
      * @param moodle_page $page
      * @param string $target one of rendering target constants
      */
-    public function __construct(moodle_page $page, $target) {
+    public function __construct(moodle_page $page, $target)
+    {
         parent::__construct($page, $target);
 
         // Since format_topics_advanced_renderer::section_edit_controls() only displays the 'Set current section' control when editing mode is on
@@ -39,7 +43,8 @@ class format_cop_renderer extends format_section_renderer_base
      * Generate the starting container html for a list of sections
      * @return string HTML to output.
      */
-    protected function start_section_list() {
+    protected function start_section_list()
+    {
         return html_writer::start_tag('ul', array('class' => 'topics'));
     }
 
@@ -47,7 +52,8 @@ class format_cop_renderer extends format_section_renderer_base
      * Generate the closing container html for a list of sections
      * @return string HTML to output.
      */
-    protected function end_section_list() {
+    protected function end_section_list()
+    {
         return html_writer::end_tag('ul');
     }
 
@@ -55,7 +61,8 @@ class format_cop_renderer extends format_section_renderer_base
      * Generate the title for this section page
      * @return string the page title
      */
-    protected function page_title() {
+    protected function page_title()
+    {
         return get_string('coppage', 'format_cop');
     }
 
@@ -67,7 +74,8 @@ class format_cop_renderer extends format_section_renderer_base
      * @param bool $onsectionpage true if being printed on a section page
      * @return array of edit control items
      */
-    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
+    protected function section_edit_control_items($course, $section, $onsectionpage = false)
+    {
         global $PAGE;
 
         if (!$PAGE->user_is_editing()) {
@@ -133,9 +141,11 @@ class format_cop_renderer extends format_section_renderer_base
      * @param array $mods (argument not used)
      * @param array $modnames (argument not used)
      * @param array $modnamesused (argument not used)
+     * @throws dml_exception
      */
-    public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        global $PAGE;
+    public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused)
+    {
+        global $OUTPUT, $PAGE;
 
         $modinfo = get_fast_modinfo($course);
         $course = course_get_format($course)->get_course();
@@ -143,7 +153,16 @@ class format_cop_renderer extends format_section_renderer_base
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
 
         // New posts and resources boxes will go here
-        echo '<h3>nice</h3>';
+        $recentactivity = $this->get_forum_activity_since_last_logout();
+        $recentposts = new recent_posts($recentactivity);
+//        $mostliked = $this->get_most_liked_posts();
+//        $mostlikedposts = new most_liked_posts($mostliked);
+
+
+
+        echo $OUTPUT->render($recentposts);
+//        echo $OUTPUT->render($mostlikedposts);
+
 
         // Section list
         echo $this->start_section_list();
@@ -173,5 +192,45 @@ class format_cop_renderer extends format_section_renderer_base
             echo $this->change_number_sections($course, 0);
         }
         echo $this->end_section_list();
+    }
+
+    /**
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_forum_activity_since_last_logout(): array {
+        global $COURSE, $USER;
+        if (!$forums = forum_get_readable_forums($USER->id, $COURSE->id)) {
+            return [];
+        }
+        $cmids = $posts = [];
+        $index = 0;
+        $lastlogout = $this->get_user_last_logout_timestamp();
+        foreach ($forums as $forum) {
+            $cmids[] = $forum->cm->id;
+        }
+        foreach ($cmids as $cmid) {
+            forum_get_recent_mod_activity($posts, $index, $lastlogout, $COURSE->id, $cmid);
+        }
+        return $posts;
+    }
+
+    /**
+     * @throws dml_exception
+     */
+    public function get_user_last_logout_timestamp(): string {
+        global $DB, $USER;
+        $params = ['userid' => $USER->id];
+        $sql = "SELECT userid, timecreated time
+                FROM {logstore_standard_log}
+                WHERE userid = :userid and eventname LIKE \"%loggedout%\"
+                ORDER BY time DESC
+                LIMIT 1";
+        if ($record = $DB->get_records_sql($sql, $params)) {}
+        return $record[$USER->id]->time;
+    }
+
+    public function get_most_liked_posts() {
+
     }
 }

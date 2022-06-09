@@ -99,7 +99,7 @@ class format_cop extends format_base {
      * @return array This will be passed in ajax respose
      * @throws moodle_exception
      */
-    function ajax_section_move(): array
+    public function ajax_section_move(): array
     {
         global $PAGE;
         $titles = array();

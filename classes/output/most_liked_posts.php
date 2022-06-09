@@ -9,14 +9,14 @@ use renderable;
 use stdClass;
 use templatable;
 
-class recent_posts implements renderable, templatable
+class most_liked_posts implements renderable, templatable
 {
     private $posts;
 
     /**
      * @throws moodle_exception
      */
-    public function __construct($recentactivity)
+    public function __construct($mostliked)
     {
         $posts = [];
         foreach ($recentactivity as $item) {
