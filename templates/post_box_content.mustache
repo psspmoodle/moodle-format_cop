@@ -1,0 +1,11 @@
+{{< format_cop/post_box }}
+    {{$boxtitle}} {{boxtitle}} {{/boxtitle}}
+    {{$posts}}
+        {{#posts}}
+            <li>
+                <span class="d-block"><a href="{{posturl}}">{{name}}</a></span>
+                <span class="small d-block">{{userfullname}} ({{modified}})</span>
+            </li>
+        {{/posts}}
+    {{/posts}}
+{{/format_cop/post_box }}
