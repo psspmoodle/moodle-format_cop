@@ -1,11 +1,18 @@
 {{< format_cop/post_box }}
     {{$boxtitle}} {{boxtitle}} {{/boxtitle}}
     {{$posts}}
+        <ul class="list-unstyled mb-0">
         {{#posts}}
-            <li>
-                <span class="d-block"><a href="{{posturl}}">{{name}}</a></span>
-                <span class="small d-block">{{userfullname}} ({{modified}})</span>
-            </li>
+                <li>
+                    <span class="d-block"><a href="{{posturl}}">{{postname}}</a></span>
+                    <span class="small d-block">{{userfullname}} ({{modified}})</span>
+                </li>
         {{/posts}}
+        </ul>
     {{/posts}}
+    {{$morelink}}
+        {{#morelink}}
+            <a class="mt-auto align-self-end" href="{{morelink}}">More…</a>
+        {{/morelink}}
+    {{/morelink}}
 {{/format_cop/post_box }}

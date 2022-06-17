@@ -32,3 +32,5 @@ $string['descriptorsubsection'] = 'Subsection: ';
 $string['progresstext'] = 'Progress';
 $string['mainpage'] = 'Main page';
 $string['coppage'] = 'COP page';
+$string['tagarea_forum_posts'] = 'CoP forum posts';
+$string['tagcollection_cop_forum_posts'] = 'CoP forum posts';

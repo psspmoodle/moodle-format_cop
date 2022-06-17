@@ -113,4 +113,8 @@ class format_cop extends format_base {
         }
         return array('sectiontitles' => $titles, 'action' => 'move');
     }
+
+    public function get_tagged_posts() {
+        $temp = 0;
+    }
 }

@@ -10,6 +10,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022051800;
+$plugin->version   = 2022061700;
 $plugin->requires  = 2018050800;
 $plugin->component = 'format_cop';

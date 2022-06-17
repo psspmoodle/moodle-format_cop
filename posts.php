@@ -1,19 +1,36 @@
 <?php
 
-require_once('../config.php');
+require_once('../../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->dirroot.'/mod/forum/lib.php');
 
-use core_table\local\filter\filter;
-use core_table\local\filter\integer_filter;
+use format_cop\output\table\posts_factory;
 
-const DEFAULT_PAGE_SIZE = 20;
+$courseid = optional_param('id', 0, PARAM_INT);
+$filter = optional_param('filter', 'recent', PARAM_TEXT);
+$userid = optional_param('userid', 0, PARAM_INT);
 
-$page         = optional_param('page', 0, PARAM_INT); // Which page to show.
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
-$contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
-$courseid     = optional_param('id', 0, PARAM_INT); // This are required.
+$course = get_course($courseid);
+$context = context_course::instance($course->id);
+$PAGE->set_context($context);
+$PAGE->set_url('/course/format/cop/posts.php');
 
-$filterset = new \core_user\table\posts_filterset();
-$filterset->add_filter(new integer_filter('courseid', filter::JOINTYPE_DEFAULT, [(int)$course->id]));
+if ($forums = forum_get_readable_forums($USER->id, $courseid)) {
+    $table = posts_factory::create($filter, $forums);
+}
 
-$participanttable = new \core_user\table\participants("user-index-participants-{$course->id}");
+$PAGE->set_title($table->get_title());
+$PAGE->set_heading($table->get_title());
+// @TODO fix breadcrumbs to include other CoP pages
+
+$PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php'), ['id' => $COURSE->id]);
+$PAGE->navbar->add($table->get_title(), new moodle_url('/course/format/cop/posts.php'));
+echo $OUTPUT->header();
+// Get the forums in this course accessible to the user
+
+
+if ($forums) {
+    echo forum_search_form($course);
+    $table->out(40, true);
+}
+echo $OUTPUT->footer();
