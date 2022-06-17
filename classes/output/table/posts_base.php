@@ -21,11 +21,6 @@ abstract class posts_base extends table_sql
     protected array $forums;
 
     /**
-     * @var int
-     */
-    protected int $posts_summary_box_length = 5;
-
-    /**
      * Called from child classes only.
      *
      * @param array $forums
@@ -133,8 +128,7 @@ abstract class posts_base extends table_sql
             $record->forumurl = $this->make_forumurl($record->cmid);
             $record->posturl = $this->make_posturl($record->discussionid, $record->postid);
         }
-        $records = array_values($records);
-        return array_slice($records, 0, $this->posts_summary_box_length);
+        return array_values($records);
     }
 
     /**

@@ -55,8 +55,9 @@ class post_box_container implements renderable, templatable {
         foreach ($this->boxes as $box) {
             $data = new stdClass();
             $data->boxtitle = $box->get_title();
-            $data->posts = $box->get_posts_summary_box();
-            $data->morelink = count($data->posts) > 5 ? $this->make_more_link($box) : '';
+            $posts = $box->get_posts_summary_box();
+            $data->morelink = count($posts) > 5 ? $this->make_more_link($box) : '';
+            $data->posts = array_slice($posts, 0, 5);
             $boxes[] = $data;
         }
         $boxdata->boxdata = $boxes;
