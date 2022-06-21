@@ -20,7 +20,20 @@ require_once($CFG->dirroot. '/course/format/lib.php');
  */
 class format_cop extends format_base {
 
-    public function extend_course_navigation($navigation, navigation_node $node) {
+    /**
+     * @throws moodle_exception
+     */
+    public function extend_course_navigation($navigation, navigation_node $node)
+    {
+//        global $COURSE;
+//        $url = new moodle_url('/course/format/cop/posts.php', ['id' => $COURSE->id]);
+//        $navigation->add('Forums Summary', $url);
+        parent::extend_course_navigation($navigation, $node);
+        $coursenode = $navigation->find($this->courseid, navigation_node::TYPE_COURSE);
+        $icon = new pix_icon('t/viewdetails', 'summary');
+        $summarynode = $coursenode->add('Forums summary', new moodle_url('/course/format/cop/posts.php', ['id' => $this->courseid]), null, null, null, $icon);
+
+
     }
 
     /**
@@ -112,9 +125,5 @@ class format_cop extends format_base {
             }
         }
         return array('sectiontitles' => $titles, 'action' => 'move');
-    }
-
-    public function get_tagged_posts() {
-        $temp = 0;
     }
 }

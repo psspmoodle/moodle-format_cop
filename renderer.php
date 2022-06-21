@@ -9,7 +9,7 @@
  */
 
 use format_cop\output\post_box_container;
-use format_cop\output\table\posts_factory;
+use format_cop\output\table\posts_summary_table;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -155,7 +155,7 @@ class format_cop_renderer extends format_section_renderer_base
         $context = context_course::instance($course->id);
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
 
-        echo $this->print_post_boxes();
+        echo $this->print_post_views();
 
         // Section list
         echo $this->start_section_list();
@@ -193,14 +193,10 @@ class format_cop_renderer extends format_section_renderer_base
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function print_post_boxes(): string {
-        global $COURSE, $USER;
-        // Get the forums in this course accessible to the user
-        if (!$forums = forum_get_readable_forums($USER->id, $COURSE->id)) {
-            return '';
-        }
-        $boxes = posts_factory::create(['lastvisit', 'liked', 'discussed'], $forums);
-        return $this->courserenderer->render(new post_box_container($boxes));
+    public function print_post_views(): string {
+        global $COURSE;
+        $views = posts_summary_table::create($COURSE->id, ['recent', 'liked', 'discussed']);
+        return $this->courserenderer->render(new post_box_container($views));
     }
 
 }

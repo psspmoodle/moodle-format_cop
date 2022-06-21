@@ -1,7 +1,7 @@
 <?php
 
 /**
- * EN lang file
+ * format.php
  *
  * @package    format_cop
  * @copyright  Matt Donnelly CAMH, 2022
