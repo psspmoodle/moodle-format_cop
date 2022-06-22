@@ -54,7 +54,7 @@ class post_box_container implements renderable, templatable {
     }
 
     /**
-     * This is called in table_sql::out().
+     * This code is called in table_sql::out(), so we need to reproduce it here.
      *
      * @param posts_summary_table $table
      * @return void
@@ -74,6 +74,7 @@ class post_box_container implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
+        global $COURSE;
         $boxdata = new stdClass();
         $boxes = [];
         foreach ($this->tables as $table) {
@@ -83,9 +84,10 @@ class post_box_container implements renderable, templatable {
             $table->setup();
             $table->query_db(6, false);
             $data->posts = array_values($this->prepare_postdata($table));
-            $data->morelink = count($table->rawdata) > 2 ? ($table->baseurl)->out(false) : '';
+            $data->morelink = count($table->rawdata) > 5 ? ($table->baseurl)->out(false) : '';
             $boxes[] = $data;
         }
+        $boxdata->coursesummary = $COURSE->summary;
         $boxdata->boxdata = $boxes;
         $boxdata->recenturl = $this->make_recent_posts_link();
         return $boxdata;

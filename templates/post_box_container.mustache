@@ -1,4 +1,11 @@
 <div class="container">
+    {{#coursesummary}}
+        <div class="row">
+            <div class="col-12">
+                {{{coursesummary}}}
+            </div>
+        </div>
+     {{/coursesummary}}
     <div class="row border-top border-left">
         {{#boxdata}}
             {{> format_cop/post_box_content }}

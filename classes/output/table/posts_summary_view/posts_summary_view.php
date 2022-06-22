@@ -2,12 +2,68 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-interface posts_summary_view
+abstract class posts_summary_view
 {
-    public function get_default_order(): string;
-    public function get_default_column(): string;
-    public function get_sql(): array;
-    public function get_title(): string;
-    public function get_headers(): array;
-    public function get_columns(): array;
+    protected array $columns;
+
+    protected string $default_column;
+
+    protected string $default_order;
+
+    protected array $headers;
+
+    protected array $sql;
+
+    protected string $title;
+
+    protected function __construct()
+    {
+    }
+
+    abstract protected function set_sql($cmids);
+
+    public function get_sql(): array
+    {
+        return $this->sql;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_default_column(): string
+    {
+        return $this->default_column;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_default_order(): string
+    {
+        return $this->default_order;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_title(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function get_headers(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function get_columns(): array
+    {
+        return $this->columns;
+    }
 }
