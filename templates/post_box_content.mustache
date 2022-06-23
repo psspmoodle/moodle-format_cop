@@ -4,8 +4,8 @@
         <ul class="list-unstyled mb-0 ml-0">
         {{#posts}}
                 <li>
-                    <span class="d-block"><a href="{{posturl}}">{{postname}}</a></span>
-                    <span class="small d-block ml-2">{{userfullname}} ({{modified}})</span>
+                    <span class="d-block"><a href="{{posturl}}">{{postname}}{{discussionname}}</a></span>
+                    <span class="small d-block ml-2">{{userfullname}} {{#modified}}({{modified}}){{/modified}}</span>
                 </li>
         {{/posts}}
         </ul>

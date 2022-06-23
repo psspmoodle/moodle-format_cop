@@ -21,6 +21,7 @@ class yourposts extends posts_summary_view
         $this->headers = ['Post', 'Forum', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Your posts';
+        $this->countsql = [];
     }
 
     /**
@@ -65,5 +66,9 @@ class yourposts extends posts_summary_view
             'where' => 'p.userid = :userid',
             'params' => $params
         ];
+    }
+
+    protected function set_count_sql(array $cmids = [])
+    {
     }
 }

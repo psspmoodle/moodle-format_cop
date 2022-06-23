@@ -39,11 +39,10 @@ class recent extends posts_summary_view
                 <<<END
                 p.id postid
                 ,d.id discussionid
-                ,sub.cmid cmid
+                ,sub.cmid
                 ,f.name forumname
-                ,d.name discussionname
                 ,p.subject postname
-                ,p.modified modified
+                ,p.modified
                 ,CONCAT(u.firstname, ' ', u.lastname) userfullname
                 END,
             'from' =>

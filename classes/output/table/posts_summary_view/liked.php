@@ -41,7 +41,6 @@ class liked extends posts_summary_view
                 ,d.id discussionid
                 ,sub.cmid cmid
                 ,f.name forumname
-                ,d.name discussionname
                 ,p.subject postname
                 ,p.modified modified
                 ,CONCAT(u.firstname, ' ', u.lastname) userfullname
@@ -64,7 +63,7 @@ class liked extends posts_summary_view
                 JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 JOIN {rating} r ON r.contextid = cxt.id AND r.itemid = p.id
                 END,
-            'where' => '1=1 GROUP BY r.itemid, p.id, d.id, sub.cmid, f.name, d.name, p.subject, p.modified, CONCAT(u.firstname, \' \', u.lastname)',  // 1=1 required or query execution will explode
+            'where' => '1=1 GROUP BY r.itemid, p.id, d.id, sub.cmid, f.name, p.subject, p.modified, CONCAT(u.firstname, \' \', u.lastname)',  // 1=1 required or query execution will explode
             'params' => $params
         ];
     }

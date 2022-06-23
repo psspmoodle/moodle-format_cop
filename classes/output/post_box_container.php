@@ -46,9 +46,15 @@ class post_box_container implements renderable, templatable {
      */
     private function prepare_postdata(posts_summary_table $posts, int $length = 5) {
         foreach ($posts->rawdata as $post) {
-            $post->modified = $posts->get_post_formatted_datetime($post->modified);
+            if (property_exists($post, 'modified')) {
+                $post->modified = $posts->get_post_formatted_datetime($post->modified);
+            }
             $post->forumurl = $posts->make_forumurl($post->cmid);
-            $post->posturl = $posts->make_posturl($post->discussionid, $post->postid);
+            $postid = null;
+            if (property_exists($post, 'postid')) {
+                $postid = $post->postid;
+            }
+            $post->posturl = $posts->make_posturl($post->discussionid, $postid);
         }
         return array_slice($posts->rawdata, 0, $length);
     }

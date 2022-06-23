@@ -35,17 +35,18 @@ class course_module implements templatable, renderable
         if ($tagid = core_tag_tag::get_by_name(core_tag_collection::get_default(), 'featured', 'id')) {
             $featuredtag = core_tag_tag::get($tagid->id);
             $contextid = $this->cm->context->id;
-            $featuredposts = $featuredtag->get_tagged_items(
+            if ($featuredposts = $featuredtag->get_tagged_items(
                 'mod_forum',
                 'forum_posts',
                 null, null,
                 "tt.contextid = :contextid",
                 ['contextid' => $contextid]
-            );
-            usort($featuredposts, function($x, $y) {
-               return $y->modified <=> $x->modified;
-            });
-            return $featuredposts[0];
+            )) {
+                usort($featuredposts, function($x, $y) {
+                    return $y->modified <=> $x->modified;
+                });
+                return $featuredposts[0];
+            }
         }
         return false;
     }
@@ -60,9 +61,10 @@ class course_module implements templatable, renderable
         $data = new stdClass();
         $data->name = $this->cm->get_name();
         $data->url = $this->cm->url;
-        $featured = $this->get_most_recent_featured_post();
-        $data->featuredtitle = $featured->subject;
-        $data->featuredurl = new moodle_url('/mod/forum/discuss.php', ['d' => $featured->discussion], 'p' . $featured->id);
+        if ($featured = $this->get_most_recent_featured_post()) {
+            $data->featuredtitle = $featured->subject;
+            $data->featuredurl = new moodle_url('/mod/forum/discuss.php', ['d' => $featured->discussion], 'p' . $featured->id);
+        }
         $record = $DB->get_record($this->cm->modname, ['id' => $this->cm->instance]);
         $text = file_rewrite_pluginfile_urls($record->intro, 'pluginfile.php',
             $this->cm->context->id, 'mod_forum', 'intro', null);

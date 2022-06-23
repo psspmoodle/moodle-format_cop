@@ -15,10 +15,10 @@ class discussed extends posts_summary_view
     public function __construct($cmids)
     {
         parent::__construct();
-        $this->columns = ['discussed', 'post', 'forumname', 'userfullname', 'modified'];
+        $this->columns = ['discussed', 'discussionname', 'forumname', 'userfullname'];
         $this->default_column = 'discussed';
         $this->default_order = 'SORT_DESC';
-        $this->headers = ['Post count', 'Post', 'Forum', 'Author', 'Date'];
+        $this->headers = ['Post count', 'Discussion', 'Forum', 'Author'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Most discussed';
         $this->countsql = $this->set_count_sql($cmids);
@@ -37,22 +37,19 @@ class discussed extends posts_summary_view
         return [
             'select' =>
                 <<<END
-                p.id postid
-                ,d.id discussionid
-                ,sub.cmid cmid
+                d.id discussionid
+                ,sub.cmid
                 ,f.name forumname
                 ,d.name discussionname
-                ,p.subject postname
-                ,p.modified modified
                 ,CONCAT(u.firstname, ' ', u.lastname) userfullname
-                ,COUNT(p.discussion) discussed
+                ,COUNT(p.id) discussed
                 END,
             'from' =>
                 <<<END
                 {forum_posts} p
                 JOIN {forum_discussions} d ON p.discussion = d.id
                 JOIN {forum} f ON d.forum = f.id
-                JOIN {user} u ON p.userid = u.id
+                JOIN {user} u ON d.userid = u.id
                 JOIN (
                     SELECT cm.id cmid
                     ,cm.instance instance
@@ -63,7 +60,7 @@ class discussed extends posts_summary_view
                 ) sub ON f.id = sub.instance
                 JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 END,
-            'where' => '1=1 GROUP BY p.discussion HAVING COUNT(p.discussion) > 1',
+            'where' => '1=1 GROUP BY d.id, sub.cmid, f.name, d.name, CONCAT(u.firstname, \' \', u.lastname)',
             'params' => $params
         ];
     }

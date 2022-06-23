@@ -21,6 +21,7 @@ class starred extends posts_summary_view
         $this->headers = ['Forum', 'Discussion', 'Author', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Your starred discussions';
+        $this->countsql = [];
     }
 
     /**
@@ -63,5 +64,9 @@ class starred extends posts_summary_view
             'where' => 'fav.userid = :userid',
             'params' => $params
         ];
+    }
+
+    protected function set_count_sql(array $cmids = [])
+    {
     }
 }

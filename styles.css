@@ -10,3 +10,7 @@
 #page-mod-forum-view.path-mod-forum .breadcrumb .breadcrumb-item:nth-of-type(4) {
     display: none;
 }
+
+#page-course-view-cop #region-main .card-body {
+    padding: 1rem;
+}

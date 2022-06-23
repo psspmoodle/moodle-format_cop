@@ -134,6 +134,19 @@ class posts_summary_table extends table_sql
      * @return string
      * @throws moodle_exception
      */
+    public function col_discussionname($record)
+    {
+        $url = $this->make_posturl($record->discussionid);
+        return html_writer::tag('a', $record->discussionname, ['href'=>$url]);
+    }
+
+    /**
+     * Column is common to all views. 'col_' methods are called from parent.
+     *
+     * @param $record
+     * @return string
+     * @throws moodle_exception
+     */
     public function col_forumname($record)
     {
         $url = $this->make_forumurl($record->cmid);
@@ -179,8 +192,9 @@ class posts_summary_table extends table_sql
      * @return moodle_url
      * @throws moodle_exception
      */
-    public function make_posturl($discussionid, $postid): moodle_url {
-        return new moodle_url('/mod/forum/discuss.php', ["d" => $discussionid], 'p' . $postid);
+    public function make_posturl($discussionid, $postid = null): moodle_url {
+        $anchor = $postid > 0 ? 'p' . $postid : null;
+        return new moodle_url('/mod/forum/discuss.php', ["d" => $discussionid], $anchor);
     }
 
     /**
