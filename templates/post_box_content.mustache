@@ -1,11 +1,11 @@
 {{< format_cop/post_box }}
     {{$boxtitle}} {{boxtitle}} {{/boxtitle}}
     {{$posts}}
-        <ul class="list-unstyled mb-0">
+        <ul class="list-unstyled mb-0 ml-0">
         {{#posts}}
                 <li>
                     <span class="d-block"><a href="{{posturl}}">{{postname}}</a></span>
-                    <span class="small d-block">{{userfullname}} ({{modified}})</span>
+                    <span class="small d-block ml-2">{{userfullname}} ({{modified}})</span>
                 </li>
         {{/posts}}
         </ul>

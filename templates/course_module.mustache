@@ -1,0 +1,22 @@
+{{#visible}}
+<div class="content card mb-3">
+    <div class="row no-gutters">
+        <div class="col-3">
+            <a href="{{url}}"><img class="cop-forum img-fluid" src="{{imgsrc}}"></a>
+        </div>
+        <div class="col-9">
+            <div class="card-body d-flex flex-column">
+
+                <h4 class="card-title"><a href="{{url}}">{{name}}</a><span class="small">{{{afterlink}}}</span></h4>
+                <div class="card-text">{{{content}}}</div>
+                {{#featuredtitle}}
+                <div>
+                    <span class="d-block">Featured post: <a href="{{featuredurl}}"><strong>{{featuredtitle}}</strong></a></span>
+                </div>
+                {{/featuredtitle}}
+                {{{availability.formattedinfo}}}
+            </div>
+        </div>
+    </div>
+</div>
+{{/visible}}

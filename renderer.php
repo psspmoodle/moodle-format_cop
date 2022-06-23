@@ -48,6 +48,7 @@ class format_cop_renderer extends format_section_renderer_base
     /**
      * Generate the title for this section page
      * @return string the page title
+     * @throws coding_exception
      */
     protected function page_title()
     {
@@ -66,105 +67,13 @@ class format_cop_renderer extends format_section_renderer_base
      * @throws moodle_exception
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        global $PAGE;
-
-        $modinfo = get_fast_modinfo($course);
-        $course = course_get_format($course)->get_course();
-        $context = context_course::instance($course->id);
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
+        $summary = new stdClass();
+        $summary->summary = file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php',
+            (context_course::instance($course->id))->id, 'course', 'summary', null);
+        echo $this->courserenderer->render_from_template('format_cop/course_summary', $summary);
         echo $this->print_post_views();
         echo $this->print_course_modules();
-//
-//        echo <<<END
-//<div class="content mt-3">
-//    <div class="section_availability"></div>
-//    <div class="summary"></div>
-//    <div class="container">
-//        <div class="row">
-//            <div class="col-12 border p-3 d-flex">
-//                <img class="cop-forum img-fluid" src="http://localhost/dev311/moodle/draftfile.php/5/user/draft/109963612/eddie-or-jonathan.jpeg" style="margin: -1rem 1rem -1rem -1rem; max-width: 25%">
-//                <div>
-//                    <h4><a href="#">OSP Clinicians forum</a></h4>
-//                    <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste a corrupti omnis magni, libero temporibus voluptatum, quae incidunt dolores eaque est quasi consectetur voluptates saepe ipsa recusandae? Nihil, veniam assumenda!</p>
-//                                    <div>
-//                        <span class="d-block ml-3 mt-2"><strong>Featured discussion:</strong> Are you more like Eddie or Jonathan?</span>
-//                    </div>
-//                </div>
-//            </div>
-//
-//        </div>
-//    </div>
-//</div>
-//<div class="content mt-3">
-//    <div class="section_availability"></div>
-//    <div class="summary"></div>
-//    <div class="container">
-//        <div class="row">
-//            <div class="col-12 border p-3 d-flex">
-//                <img class="cop-forum img-fluid" src="http://localhost/dev311/moodle/draftfile.php/5/user/draft/109963612/eddie-or-jonathan.jpeg" style="margin: -1rem 1rem -1rem -1rem; max-width: 25%">
-//                <div>
-//                    <h4><a href="#">Faculty forum</a></h4>
-//                    <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste a corrupti omnis magni, libero temporibus voluptatum, quae incidunt dolores eaque est quasi consectetur voluptates saepe ipsa recusandae? Nihil, veniam assumenda!</p>
-//                                    <div>
-//                        <span class="d-block ml-3 mt-2"><strong>Featured discussion:</strong> Are you more like Eddie or Jonathan?</span>
-//                    </div>
-//                </div>
-//            </div>
-//
-//        </div>
-//    </div>
-//</div>
-//<div class="content mt-3">
-//    <div class="section_availability"></div>
-//    <div class="summary"></div>
-//    <div class="container">
-//        <div class="row">
-//            <div class="col-12 border p-3 d-flex">
-//                <img class="cop-forum img-fluid" src="http://localhost/dev311/moodle/draftfile.php/5/user/draft/109963612/eddie-or-jonathan.jpeg" style="margin: -1rem 1rem -1rem -1rem; max-width: 25%">
-//                <div>
-//                    <h4><a href="#">Clinical Consultants forum</a></h4>
-//                    <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste a corrupti omnis magni, libero temporibus voluptatum, quae incidunt dolores eaque est quasi consectetur voluptates saepe ipsa recusandae? Nihil, veniam assumenda!</p>
-//                                    <div>
-//                        <span class="d-block ml-3 mt-2"><strong>Featured discussion:</strong> Are you more like Eddie or Jonathan?</span>
-//                    </div>
-//                </div>
-//            </div>
-//
-//        </div>
-//    </div>
-//</div>
-//END;
-        // Section list
-        echo $this->start_section_list();
-        $numsections = course_get_format($course)->get_last_section_number();
-        foreach ($modinfo->get_section_info_all() as $section => $thissection) {
-            if ($section > $numsections) {
-                // activities inside this section are 'orphaned', this section will be printed as 'stealth' below
-                continue;
-            }
-            // Show the section if the user is permitted to access it, OR if it's not available
-            // but there is some available info text which explains the reason & should display,
-            // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisible ||
-                ($thissection->visible && !$thissection->available && !empty($thissection->availableinfo)) ||
-                (!$thissection->visible && !$course->hiddensections);
-            if (!$showsection) {
-                continue;
-            }
-            echo $this->section_header($thissection, $course, false, 0);
-            if ($thissection->uservisible) {
-                echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
-                echo $this->courserenderer->course_section_add_cm_control($course, $section, 0);
-            }
-            echo $this->section_footer();
-        }
-        if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
-            echo $this->change_number_sections($course, 0);
-        }
-        echo $this->end_section_list();
-
-
-
     }
 
     /**
@@ -176,7 +85,7 @@ class format_cop_renderer extends format_section_renderer_base
         $output = '';
         $modinfo = get_fast_modinfo($this->page->course->id);
         foreach ($modinfo->get_cms() as $cm) {
-            $module = new course_module($cm);
+            $module = new course_module($cm, $this->courserenderer);
             $output .= $this->courserenderer->render($module);
         }
         return $output;
@@ -193,5 +102,4 @@ class format_cop_renderer extends format_section_renderer_base
         $views = posts_summary_table::create($this->page->course->id, ['recent', 'liked', 'discussed']);
         return $this->courserenderer->render(new post_box_container($views));
     }
-
 }

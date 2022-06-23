@@ -96,6 +96,9 @@ class posts_summary_table extends table_sql
         // Set table properties from view
         $this->sortable(true, $this->view->get_default_column(), $this->view->get_default_order());
         $this->set_sql(...array_values($view->get_sql()));
+        if ($countsql = $view->get_count_sql()) {
+            $this->set_count_sql(...$countsql);
+        }
     }
 
 

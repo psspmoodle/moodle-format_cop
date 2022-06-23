@@ -21,6 +21,7 @@ class discussed extends posts_summary_view
         $this->headers = ['Post count', 'Post', 'Forum', 'Author', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Most discussed';
+        $this->countsql = $this->set_count_sql($cmids);
     }
 
     /**
@@ -65,5 +66,37 @@ class discussed extends posts_summary_view
             'where' => '1=1 GROUP BY p.discussion HAVING COUNT(p.discussion) > 1',
             'params' => $params
         ];
+    }
+
+    /**
+     * @param $cmids
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    protected function set_count_sql($cmids = []): array
+    {
+        global $DB;
+        [$insql, $params] = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED, 'cmids');
+        return [ <<<END
+                SELECT COUNT(1) 
+                FROM {forum_posts} p
+                JOIN {forum_discussions} d ON p.discussion = d.id
+                JOIN {forum} f ON d.forum = f.id
+                JOIN {user} u ON p.userid = u.id
+                JOIN (
+                    SELECT cm.id cmid
+                    ,cm.instance instance
+                    FROM {course_modules} cm
+                    JOIN {modules} m ON m.id = cm.module
+                    WHERE m.name = 'forum'
+                    AND cm.id $insql
+                ) sub ON f.id = sub.instance
+                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
+                WHERE 1=1
+                END,
+            $params
+        ];
+
     }
 }

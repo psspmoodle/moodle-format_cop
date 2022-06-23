@@ -21,6 +21,7 @@ class recent extends posts_summary_view
         $this->headers = ['Forum', 'Post', 'Author', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Most recent';
+        $this->countsql = [];
     }
 
     /**
@@ -64,5 +65,9 @@ class recent extends posts_summary_view
             'where' => '1=1',
             'params' => $params
         ];
+    }
+
+    protected function set_count_sql($cmids = []): array
+    {
     }
 }

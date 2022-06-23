@@ -16,15 +16,24 @@ abstract class posts_summary_view
 
     protected string $title;
 
+    protected array $countsql;
+
     protected function __construct()
     {
     }
 
     abstract protected function set_sql($cmids);
 
+    abstract protected function set_count_sql(array $cmids = []);
+
     public function get_sql(): array
     {
         return $this->sql;
+    }
+
+    public function get_count_sql(): array
+    {
+        return $this->countsql;
     }
 
     /**
