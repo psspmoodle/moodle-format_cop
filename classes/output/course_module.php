@@ -75,7 +75,7 @@ class course_module implements templatable, renderable
         }
         $data->afterlink = $this->cm->afterlink;
         $data->visible = $this->cm->uservisible;
-        $data->availability = $this->courserenderer->course_section_cm_availability($this->cm);
+        $data->restrictions = $this->courserenderer->course_section_cm_availability($this->cm);
         return $data;
     }
 }

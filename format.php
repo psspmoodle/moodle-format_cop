@@ -16,6 +16,3 @@ $course = course_get_format($course)->get_course();
 
 $renderer = $PAGE->get_renderer('format_cop');
 $renderer->print_multiple_section_page($course, null, null, null, null);
-
-$PAGE->requires->js('/course/format/topics/format.js');
-$PAGE->requires->js_call_amd('core_course/sectionlistener');

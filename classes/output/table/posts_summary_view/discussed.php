@@ -59,7 +59,7 @@ class discussed extends posts_summary_view
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
                 END,
-            'where' => '1=1 GROUP BY sub.cmid, f.name, d.name, CONCAT(u.firstname, \' \', u.lastname) HAVING COUNT(d.id) > 1',
+            'where' => '1=1 GROUP BY d.id, sub.cmid, f.name, d.name, CONCAT(u.firstname, \' \', u.lastname) HAVING COUNT(d.id) > 1',
             'params' => $params
         ];
     }
