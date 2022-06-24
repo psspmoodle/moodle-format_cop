@@ -59,7 +59,6 @@ class recent extends posts_summary_view
                     WHERE m.name = 'forum'
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
-                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 END,
             'where' => '1=1',
             'params' => $params

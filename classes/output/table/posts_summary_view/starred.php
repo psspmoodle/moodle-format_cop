@@ -58,7 +58,6 @@ class starred extends posts_summary_view
                     WHERE m.name = 'forum'
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
-                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 JOIN {favourite} fav ON d.id = fav.itemid AND component = 'mod_forum' AND itemtype = 'discussions'
                END,
             'where' => 'fav.userid = :userid',

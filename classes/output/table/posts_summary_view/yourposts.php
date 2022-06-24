@@ -61,7 +61,6 @@ class yourposts extends posts_summary_view
                     WHERE m.name = 'forum'
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
-                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 END,
             'where' => 'p.userid = :userid',
             'params' => $params

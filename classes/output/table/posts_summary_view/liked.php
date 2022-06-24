@@ -39,10 +39,10 @@ class liked extends posts_summary_view
                 <<<END
                 p.id postid
                 ,d.id discussionid
-                ,sub.cmid cmid
+                ,sub.cmid
                 ,f.name forumname
                 ,p.subject postname
-                ,p.modified modified
+                ,p.modified
                 ,CONCAT(u.firstname, ' ', u.lastname) userfullname
                 ,COUNT(r.itemid) likes
                 END,
@@ -63,7 +63,7 @@ class liked extends posts_summary_view
                 JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 JOIN {rating} r ON r.contextid = cxt.id AND r.itemid = p.id
                 END,
-            'where' => '1=1 GROUP BY r.itemid, p.id, d.id, sub.cmid, f.name, p.subject, p.modified, CONCAT(u.firstname, \' \', u.lastname)',  // 1=1 required or query execution will explode
+            'where' => '1=1 GROUP BY p.id, d.id, sub.cmid, f.name, p.subject, p.modified, CONCAT(u.firstname, \' \', u.lastname)',  // 1=1 required or query execution will explode
             'params' => $params
         ];
     }
@@ -82,8 +82,7 @@ class liked extends posts_summary_view
                 SELECT COUNT(1) FROM {forum_posts} p
                 JOIN {forum_discussions} d ON p.discussion = d.id
                 JOIN {forum} f ON d.forum = f.id
-                JOIN {user} u ON p.userid = u.id
-                JOIN (
+                    JOIN (
                     SELECT cm.id cmid
                     ,cm.instance instance
                     FROM {course_modules} cm
@@ -93,7 +92,7 @@ class liked extends posts_summary_view
                 ) sub ON f.id = sub.instance
                 JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 JOIN {rating} r ON r.contextid = cxt.id AND r.itemid = p.id
-                WHERE 1=1
+                WHERE 1=1 GROUP BY p.id
                 END,
                 $params
         ];

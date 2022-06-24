@@ -42,7 +42,7 @@ class discussed extends posts_summary_view
                 ,f.name forumname
                 ,d.name discussionname
                 ,CONCAT(u.firstname, ' ', u.lastname) userfullname
-                ,COUNT(p.id) discussed
+                ,COUNT(d.id) discussed
                 END,
             'from' =>
                 <<<END
@@ -58,9 +58,8 @@ class discussed extends posts_summary_view
                     WHERE m.name = 'forum'
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
-                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
                 END,
-            'where' => '1=1 GROUP BY d.id, sub.cmid, f.name, d.name, CONCAT(u.firstname, \' \', u.lastname)',
+            'where' => '1=1 GROUP BY sub.cmid, f.name, d.name, CONCAT(u.firstname, \' \', u.lastname) HAVING COUNT(d.id) > 1',
             'params' => $params
         ];
     }
@@ -80,7 +79,6 @@ class discussed extends posts_summary_view
                 FROM {forum_posts} p
                 JOIN {forum_discussions} d ON p.discussion = d.id
                 JOIN {forum} f ON d.forum = f.id
-                JOIN {user} u ON p.userid = u.id
                 JOIN (
                     SELECT cm.id cmid
                     ,cm.instance instance
@@ -89,11 +87,9 @@ class discussed extends posts_summary_view
                     WHERE m.name = 'forum'
                     AND cm.id $insql
                 ) sub ON f.id = sub.instance
-                JOIN {context} cxt ON sub.cmid = cxt.instanceid AND cxt.contextlevel = 70
-                WHERE 1=1
+                WHERE 1=1 GROUP BY d.id HAVING COUNT(d.id) > 1
                 END,
             $params
         ];
-
     }
 }
