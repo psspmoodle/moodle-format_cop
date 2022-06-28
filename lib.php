@@ -42,8 +42,7 @@ class format_cop extends format_base {
             new pix_icon('t/viewdetails', 'summary')
         );
         // Show only forums user can actually access
-        $forums = forum_get_readable_forums($USER->id, $this->courseid);
-        foreach ($forums as $forum) {
+        foreach (forum_get_readable_forums($USER->id, $this->courseid) as $forum) {
             $node->add(
                 $forum->name,
                 new moodle_url('/mod/forum/view.php', ['id' => $forum->cm->id]),
@@ -53,6 +52,7 @@ class format_cop extends format_base {
                 new pix_icon('t/unblock', 'forum')
             );
         }
+        // Link to course calendar
         $eventsurl = new moodle_url('/calendar/view.php', ['course' => $this->courseid]);
         $eventsnode = $node->add(
             'Events',
@@ -62,9 +62,18 @@ class format_cop extends format_base {
             'events',
             new pix_icon('i/calendar', 'events calendar')
         );
+        // I'm guessing this is required because the calendar exists outside the course url 'umbrella'
         if ($eventsurl->compare($PAGE->url, URL_MATCH_BASE)) {
             navigation_node::override_active_url($eventsurl);
             $eventsnode->make_active();
+        }
+        // If we don't do this, nothing in the sidebar nav would be active when you are in an activity any deeper than the
+        // 'root' activity page (e.g. if you are in a forum discussion).
+        $forumurl = new moodle_url('/mod/forum/discuss.php');
+        if ($forumurl->compare($PAGE->url, URL_MATCH_BASE)) {
+            navigation_node::override_active_url($forumurl);
+            $forumnode = $node->find($PAGE->cm->id, navigation_node::TYPE_ACTIVITY);
+            $forumnode->make_active();
         }
         return [];
     }
