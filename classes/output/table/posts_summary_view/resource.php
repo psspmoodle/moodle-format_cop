@@ -62,7 +62,7 @@ class resource extends posts_summary_view
                 JOIN {tag_instance} ti ON ti.itemid = p.id AND ti.component = 'mod_forum' AND ti.itemtype = 'forum_posts'
                 JOIN {tag} t ON ti.tagid = t.id
                 END,
-            'where' => 't.name = "resource"',
+            'where' => "t.name = 'resource'",
             'params' => $params
         ];
     }
