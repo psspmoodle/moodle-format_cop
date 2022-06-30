@@ -30,6 +30,7 @@ class posts_summary_page implements templatable, renderable
             'Most liked posts' => 'liked',
             'Most discussed posts' => 'discussed',
             'Your starred discussions' => 'starred',
+            "Posts tagged 'resource'" => 'resource',
             'Your posts' => 'yourposts'
         ];
         $count = 0;

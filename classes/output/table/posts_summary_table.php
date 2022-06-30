@@ -10,6 +10,7 @@ use format_cop\output\table\posts_summary_view\discussed;
 use format_cop\output\table\posts_summary_view\liked;
 use format_cop\output\table\posts_summary_view\posts_summary_view;
 use format_cop\output\table\posts_summary_view\recent;
+use format_cop\output\table\posts_summary_view\resource;
 use format_cop\output\table\posts_summary_view\starred;
 use format_cop\output\table\posts_summary_view\yourposts;
 use html_writer;
@@ -66,6 +67,8 @@ class posts_summary_table extends table_sql
                 return new self($courseid, new discussed($forumcmids));
             case 'starred':
                 return new self($courseid, new starred($forumcmids));
+            case 'resource':
+                return new self($courseid, new resource($forumcmids));
             case 'yourposts':
                 return new self($courseid, new yourposts($forumcmids));
             case 'recent':
