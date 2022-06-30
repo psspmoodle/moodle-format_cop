@@ -20,11 +20,17 @@ class course_module implements templatable, renderable
 
     private cm_info $cm;
     private course_renderer $courserenderer;
+    private $coursemodedit;
 
     public function __construct($cm, $courserenderer)
     {
+        global $PAGE;
         $this->cm = $cm;
         $this->courserenderer = $courserenderer;
+        if ($PAGE->user_is_editing()) {
+            $editactions = course_get_cm_edit_actions($cm, $cm->indent, 0);
+            $this->coursemodedit = $this->courserenderer->course_section_cm_edit_actions($editactions, $cm);
+        }
     }
 
     /**
@@ -75,6 +81,7 @@ class course_module implements templatable, renderable
         if ($imgs->length > 0) {
             $data->imgsrc = $imgs->item(0)->attributes->getNamedItem('src')->value;
         }
+        $data->coursemodedit = $this->coursemodedit;
         $data->afterlink = $this->cm->afterlink;
         $data->visible = $this->cm->uservisible;
         $data->restrictions = $this->courserenderer->course_section_cm_availability($this->cm);
