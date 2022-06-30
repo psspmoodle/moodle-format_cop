@@ -7,6 +7,7 @@ use core_tag_collection;
 use core_tag_tag;
 use dml_exception;
 use dml_missing_record_exception;
+use moodle_exception;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -54,6 +55,7 @@ class course_module implements templatable, renderable
     /**
      * @inheritDoc
      * @throws dml_exception
+     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output)
     {
@@ -67,7 +69,7 @@ class course_module implements templatable, renderable
         }
         $record = $DB->get_record($this->cm->modname, ['id' => $this->cm->instance]);
         $text = file_rewrite_pluginfile_urls($record->intro, 'pluginfile.php',
-            $this->cm->context->id, 'mod_forum', 'intro', null);
+            $this->cm->context->id, 'mod_' . $this->cm->modname, 'intro', null);
         $data->content = $text;
         $imgs = (util::open_domdocument($text))->getElementsByTagName('img');
         if ($imgs->length > 0) {
