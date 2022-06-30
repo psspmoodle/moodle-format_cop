@@ -1,17 +1,17 @@
 {{#visible}}
 <div class="content card mb-3">
     <div class="row">
-        <div class="col-3 d-none d-md-inline">
+        <div class="col-auto d-none d-md-inline">
             <a href="{{url}}"><img class="cop-forum img-fluid" alt="{{name}} image" src="{{imgsrc}}"></a>
         </div>
-        <div class="col-9">
+        <div class="col">
             <div class="card-body d-flex flex-column pl-md-0">
                 {{#restrictions}}
                 <a tabindex="0"
                    class="btn p-0 mr-2 mt-1 restrict-access-lock position-absolute"
                    role="button" data-toggle="popover" data-trigger="focus" data-html="true" data-container="body"
                    data-content="{{restrictions.formattedinfo}}"
-                    style="top: 0; right: 0"
+                    style="top: 0; right: 15px"
                 >
                     <i class="far fa-lock gray600" title="Click lock icon to view availability restrictions"></i>
                 </a>

@@ -74,6 +74,7 @@ class format_cop_renderer extends format_section_renderer_base
         echo $this->courserenderer->render_from_template('format_cop/course_summary', $summary);
         echo $this->print_post_views();
         echo $this->print_course_modules();
+        echo $this->courserenderer->course_section_add_cm_control($course, 0);
     }
 
     /**
