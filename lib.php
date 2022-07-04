@@ -9,6 +9,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+/** @var moodle_config $CFG */
 require_once($CFG->dirroot. '/course/format/lib.php');
 require_once($CFG->dirroot. '/mod/forum/lib.php');
 
@@ -27,12 +28,10 @@ class format_cop extends format_base {
      * @param $navigation
      * @param navigation_node $node
      * @return array
-     * @throws moodle_exception
      */
     public function extend_course_navigation($navigation, navigation_node $node): array
     {
-        global $PAGE, $USER;
-//        parent::extend_course_navigation($navigation, $node);
+        global $PAGE;
         $node->add(
             'Forums summary',
             new moodle_url('/course/format/cop/posts.php', ['id' => $this->courseid]),
@@ -41,16 +40,19 @@ class format_cop extends format_base {
             'summary',
             new pix_icon('t/viewdetails', 'summary')
         );
-        // Show only forums user can actually access
-        foreach (forum_get_readable_forums($USER->id, $this->courseid) as $forum) {
-            $node->add(
-                $forum->name,
-                new moodle_url('/mod/forum/view.php', ['id' => $forum->cm->id]),
-                navigation_node::TYPE_ACTIVITY,
-                $forum->name,
-                $forum->cm->id,
-                new pix_icon('t/unblock', 'forum')
-            );
+        // All course modules get their own link in the sidebar
+        $modinfo = get_fast_modinfo($this->courseid);
+        foreach ($modinfo->cms as $mod) {
+            if ($mod->uservisible) {
+                $node->add(
+                    $mod->name,
+                    new moodle_url("/mod/$mod->modname/view.php", ['id' => $mod->id]),
+                    navigation_node::TYPE_ACTIVITY,
+                    $mod->name,
+                    $mod->id,
+                    new pix_icon($mod->modname, $mod->name, 'format_cop')
+                );
+            }
         }
         // Link to course calendar
         $eventsurl = new moodle_url('/calendar/view.php', ['course' => $this->courseid]);
@@ -77,4 +79,15 @@ class format_cop extends format_base {
         }
         return [];
     }
+}
+
+/**
+ * @return string[]
+ */
+function format_cop_get_fontawesome_icon_map(): array
+{
+    return [
+        'format_cop:forum' => 'fa-comment-dots',
+        'format_cop:url' => 'fa-books'
+    ];
 }

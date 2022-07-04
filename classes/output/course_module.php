@@ -18,9 +18,20 @@ use theme_boostchild\output\core\course_renderer;
 class course_module implements templatable, renderable
 {
 
+    /**
+     * @var cm_info Course module object
+     */
     private cm_info $cm;
+
+    /**
+     * @var course_renderer Renderer instance
+     */
     private course_renderer $courserenderer;
-    private $coursemodedit;
+
+    /**
+     * @var string HTML for course module edit dropdown
+     */
+    private string $coursemodedit;
 
     public function __construct($cm, $courserenderer)
     {
