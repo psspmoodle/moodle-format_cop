@@ -38,6 +38,7 @@ class course_module implements templatable, renderable
         global $PAGE;
         $this->cm = $cm;
         $this->courserenderer = $courserenderer;
+        $this->coursemodedit = '';
         if ($PAGE->user_is_editing()) {
             $editactions = course_get_cm_edit_actions($cm, $cm->indent, 0);
             $this->coursemodedit = $this->courserenderer->course_section_cm_edit_actions($editactions, $cm);

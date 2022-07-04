@@ -91,3 +91,16 @@ function format_cop_get_fontawesome_icon_map(): array
         'format_cop:url' => 'fa-books'
     ];
 }
+
+/**
+ * Insert JS to alter post tag URLs
+ *
+ * @return void
+ */
+function format_cop_before_footer()
+{
+    global $PAGE;
+    if ($PAGE->pagetype == 'mod-forum-discuss' && in_array('format-cop', explode(' ', $PAGE->bodyclasses))) {
+        $PAGE->requires->js_call_amd('format_cop/main', 'init');
+    }
+}
