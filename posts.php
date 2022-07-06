@@ -2,7 +2,6 @@
 
 require_once('../../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
-require_once($CFG->dirroot.'/mod/forum/lib.php');
 
 use format_cop\output\posts_summary_page;
 use format_cop\output\table\posts_summary_table;
@@ -13,6 +12,8 @@ $userid = optional_param('userid', 0, PARAM_INT);
 
 $course = get_course($courseid);
 $context = context_course::instance($course->id);
+require_course_login($course);
+
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 $url = new moodle_url('/course/format/cop/posts.php', ['id' => $courseid]);

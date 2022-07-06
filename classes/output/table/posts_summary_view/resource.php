@@ -2,15 +2,10 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-use coding_exception;
-use dml_exception;
-
 class resource extends posts_summary_view
 {
     /**
      * @param $cmids
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function __construct($cmids)
     {
@@ -21,14 +16,11 @@ class resource extends posts_summary_view
         $this->headers = ['Post', 'Forum', 'Author'];
         $this->sql = $this->set_sql($cmids);
         $this->title = "Posts tagged 'resource'";
-        $this->countsql = [];
     }
 
     /**
      * @param $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_sql($cmids): array
     {
@@ -65,13 +57,5 @@ class resource extends posts_summary_view
             'where' => "t.name = 'resource'",
             'params' => $params
         ];
-    }
-
-    /**
-     * @param $cmids
-     * @return array
-     */
-    protected function set_count_sql($cmids = []): array
-    {
     }
 }

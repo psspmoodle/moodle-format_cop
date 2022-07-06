@@ -2,15 +2,10 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-use coding_exception;
-use dml_exception;
-
 class recent extends posts_summary_view
 {
     /**
      * @param $cmids
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function __construct($cmids)
     {
@@ -21,14 +16,11 @@ class recent extends posts_summary_view
         $this->headers = ['Forum', 'Post', 'Author', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Most recent';
-        $this->countsql = [];
     }
 
     /**
      * @param $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_sql($cmids): array
     {
@@ -63,9 +55,5 @@ class recent extends posts_summary_view
             'where' => '1=1',
             'params' => $params
         ];
-    }
-
-    protected function set_count_sql($cmids = []): array
-    {
     }
 }

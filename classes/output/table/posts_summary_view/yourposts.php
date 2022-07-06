@@ -2,15 +2,10 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-use coding_exception;
-use dml_exception;
-
 class yourposts extends posts_summary_view
 {
     /**
      * @param $cmids
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function __construct($cmids)
     {
@@ -21,14 +16,11 @@ class yourposts extends posts_summary_view
         $this->headers = ['Post', 'Forum', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Your posts';
-        $this->countsql = [];
     }
 
     /**
      * @param $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_sql($cmids): array
     {
@@ -65,9 +57,5 @@ class yourposts extends posts_summary_view
             'where' => 'p.userid = :userid',
             'params' => $params
         ];
-    }
-
-    protected function set_count_sql(array $cmids = [])
-    {
     }
 }

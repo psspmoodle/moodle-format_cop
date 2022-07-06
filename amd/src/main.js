@@ -34,7 +34,7 @@ function replaceHref(el) {
             el.title = "Visit the Community of Practice events calendar";
             break;
         default:
-            el.href = '#';
+            el.removeAttribute('href');
     }
 }
 

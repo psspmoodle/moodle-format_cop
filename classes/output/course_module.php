@@ -5,9 +5,6 @@ namespace format_cop\output;
 use cm_info;
 use core_tag_collection;
 use core_tag_tag;
-use dml_exception;
-use dml_missing_record_exception;
-use moodle_exception;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -46,36 +43,35 @@ class course_module implements templatable, renderable
     }
 
     /**
-     * @return stdClass|bool;
-     * @throws dml_missing_record_exception
+     * @return false|mixed
      */
     private function get_most_recent_featured_post()
     {
-        if ($tagid = core_tag_tag::get_by_name(core_tag_collection::get_default(), 'featured', 'id')) {
-            $featuredtag = core_tag_tag::get($tagid->id);
-            $contextid = $this->cm->context->id;
-            if ($featuredposts = $featuredtag->get_tagged_items(
-                'mod_forum',
-                'forum_posts',
-                null, null,
-                "tt.contextid = :contextid",
-                ['contextid' => $contextid]
-            )) {
-                usort($featuredposts, function($x, $y) {
-                    return $y->modified <=> $x->modified;
-                });
-                return $featuredposts[0];
-            }
+        if (!$tagid = core_tag_tag::get_by_name(core_tag_collection::get_default(), 'featured', 'id')) {
+            return false;
+        }
+        $featuredtag = core_tag_tag::get($tagid->id);
+        $contextid = $this->cm->context->id;
+        if ($featuredposts = $featuredtag->get_tagged_items(
+            'mod_forum',
+            'forum_posts',
+            null, null,
+            "tt.contextid = :contextid",
+            ['contextid' => $contextid]
+        )) {
+            usort($featuredposts, function($x, $y) {
+                return $y->modified <=> $x->modified;
+            });
+            return $featuredposts[0];
         }
         return false;
     }
 
     /**
-     * @inheritDoc
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @param renderer_base $output
+     * @return stdClass
      */
-    public function export_for_template(renderer_base $output)
+    public function export_for_template(renderer_base $output): stdClass
     {
         global $DB;
         $data = new stdClass();

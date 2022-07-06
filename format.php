@@ -11,7 +11,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $context = context_course::instance($course->id);
-// Retrieve course format option fields and add them to the $course object.
 $course = course_get_format($course)->get_course();
 
 $renderer = $PAGE->get_renderer('format_cop');

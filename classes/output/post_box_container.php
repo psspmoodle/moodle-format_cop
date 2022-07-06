@@ -3,10 +3,8 @@
 namespace format_cop\output;
 
 use dml_exception;
-use Exception;
 use format_cop\output\table\posts_summary_table;
 use format_cop\output\table\posts_summary_view\posts_summary_view;
-use moodle_exception;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -30,19 +28,17 @@ class post_box_container implements renderable, templatable {
 
     /**
      * @return string
-     * @throws moodle_exception
      */
     private function make_recent_posts_link(): string {
         global $COURSE;
-        return (new moodle_url('/course/format/cop/posts.php', ['id' => $COURSE->id, 'view' => 'recent']))->out(false);
+        $params = ['id' => $COURSE->id, 'view' => 'recent'];
+        return (new moodle_url('/course/format/cop/posts.php', $params))->out(false);
     }
 
     /**
      * @param posts_summary_table $posts
      * @param int $length
      * @return array|Traversable|null
-     * @throws moodle_exception
-     * @throws Exception
      */
     private function prepare_postdata(posts_summary_table $posts, int $length = 5) {
         foreach ($posts->rawdata as $post) {
@@ -70,7 +66,13 @@ class post_box_container implements renderable, templatable {
         global $DB;
         $v = $table->view;
         $onerow = $DB->get_record_sql(
-            /** @lang sql */ "SELECT {$v->get_sql()['select']} FROM {$v->get_sql()['from']} WHERE {$v->get_sql()['where']}", $v->get_sql()['params'], IGNORE_MULTIPLE);
+            /** @lang sql */
+            "SELECT {$v->get_sql()['select']} 
+            FROM {$v->get_sql()['from']} 
+            WHERE {$v->get_sql()['where']}",
+            $v->get_sql()['params'],
+            IGNORE_MULTIPLE
+        );
         $table->define_columns(array_keys((array) $onerow));
         $table->define_headers(array_keys((array) $onerow));
     }
@@ -78,7 +80,6 @@ class post_box_container implements renderable, templatable {
     /**
      * @param renderer_base $output
      * @return stdClass
-     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $boxdata = new stdClass();

@@ -2,15 +2,10 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-use coding_exception;
-use dml_exception;
-
 class liked extends posts_summary_view
 {
     /**
      * @param $cmids
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function __construct($cmids)
     {
@@ -27,8 +22,6 @@ class liked extends posts_summary_view
     /**
      * @param $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_sql($cmids): array
     {
@@ -71,8 +64,6 @@ class liked extends posts_summary_view
     /**
      * @param array $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_count_sql(array $cmids = []): array
     {

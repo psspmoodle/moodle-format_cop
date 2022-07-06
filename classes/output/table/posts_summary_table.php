@@ -2,9 +2,7 @@
 
 namespace format_cop\output\table;
 
-use coding_exception;
 use DateTime;
-use dml_exception;
 use Exception;
 use format_cop\output\table\posts_summary_view\discussed;
 use format_cop\output\table\posts_summary_view\liked;
@@ -32,9 +30,6 @@ class posts_summary_table extends table_sql
      * @param int $courseid
      * @param array|string $viewtype
      * @return array|posts_summary_table
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
      */
     public static function create(int $courseid, $viewtype)
     {
@@ -54,9 +49,6 @@ class posts_summary_table extends table_sql
      * @param string $viewtype
      * @param $forumcmids
      * @return posts_summary_table
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
      */
     private static function create_single(int $courseid, string $viewtype, $forumcmids): posts_summary_table
     {
@@ -172,7 +164,6 @@ class posts_summary_table extends table_sql
     /**
      * @param $timestamp
      * @return string
-     * @throws Exception
      */
     public function get_post_formatted_datetime($timestamp): string {
         $usertime = usertime($timestamp);
@@ -183,7 +174,6 @@ class posts_summary_table extends table_sql
     /**
      * @param $cmid
      * @return moodle_url
-     * @throws moodle_exception
      */
     public function make_forumurl($cmid): moodle_url {
         return new moodle_url('/mod/forum/view.php', ["id" => $cmid]);
@@ -193,7 +183,6 @@ class posts_summary_table extends table_sql
      * @param $discussionid
      * @param $postid
      * @return moodle_url
-     * @throws moodle_exception
      */
     public function make_posturl($discussionid, $postid = null): moodle_url {
         $anchor = $postid > 0 ? 'p' . $postid : null;

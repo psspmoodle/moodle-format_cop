@@ -2,15 +2,10 @@
 
 namespace format_cop\output\table\posts_summary_view;
 
-use coding_exception;
-use dml_exception;
-
 class discussed extends posts_summary_view
 {
     /**
      * @param $cmids
-     * @throws coding_exception
-     * @throws dml_exception
      */
     public function __construct($cmids)
     {
@@ -27,8 +22,6 @@ class discussed extends posts_summary_view
     /**
      * @param $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
     protected function set_sql($cmids): array
     {
@@ -65,12 +58,10 @@ class discussed extends posts_summary_view
     }
 
     /**
-     * @param $cmids
+     * @param array $cmids
      * @return array
-     * @throws coding_exception
-     * @throws dml_exception
      */
-    protected function set_count_sql($cmids = []): array
+    protected function set_count_sql(array $cmids = []): array
     {
         global $DB;
         [$insql, $params] = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED, 'cmids');

@@ -20,11 +20,10 @@ abstract class posts_summary_view
 
     protected function __construct()
     {
+        $this->countsql = [];
     }
 
     abstract protected function set_sql($cmids);
-
-    abstract protected function set_count_sql(array $cmids = []);
 
     public function get_sql(): array
     {
