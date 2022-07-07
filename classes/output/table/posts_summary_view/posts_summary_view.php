@@ -12,15 +12,14 @@ abstract class posts_summary_view
 
     protected array $headers;
 
-    protected array $sql;
+    protected array $sql = [];
 
     protected string $title;
 
-    protected array $countsql;
+    protected array $countsql = [];
 
     protected function __construct()
     {
-        $this->countsql = [];
     }
 
     abstract protected function set_sql($cmids);

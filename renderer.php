@@ -72,24 +72,13 @@ class format_cop_renderer extends format_section_renderer_base
         $summary->summary = file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php',
             (context_course::instance($course->id))->id, 'course', 'summary', null);
         echo $this->courserenderer->render_from_template('format_cop/course_summary', $summary);
-        echo $this->print_post_views();
-        echo $this->print_course_modules();
-        echo $this->courserenderer->course_section_add_cm_control($course, 0);
-    }
-
-    /**
-     * @return string
-     * @throws moodle_exception
-     */
-    private function print_course_modules(): string
-    {
-        $output = '';
         $modinfo = get_fast_modinfo($this->page->course->id);
-        foreach ($modinfo->get_cms() as $cm) {
-            $module = new course_module($cm, $this->courserenderer);
-            $output .= $this->courserenderer->render($module);
+        // We need at least one forum
+        if (array_key_exists('forum', $modinfo->instances)) {
+            echo $this->print_post_views();
         }
-        return $output;
+        echo $this->print_course_modules($modinfo);
+        echo $this->courserenderer->course_section_add_cm_control($course, 0);
     }
 
     /**
@@ -102,5 +91,19 @@ class format_cop_renderer extends format_section_renderer_base
     {
         $views = posts_summary_table::create($this->page->course->id, ['recent', 'liked', 'discussed']);
         return $this->courserenderer->render(new post_box_container($views));
+    }
+
+    /**
+     * @param $modinfo
+     * @return string
+     */
+    private function print_course_modules($modinfo): string
+    {
+        $output = '';
+        foreach ($modinfo->get_cms() as $cm) {
+            $module = new course_module($cm, $this->courserenderer);
+            $output .= $this->courserenderer->render($module);
+        }
+        return $output;
     }
 }

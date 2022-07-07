@@ -16,7 +16,7 @@ class liked extends posts_summary_view
         $this->headers = ['Likes', 'Post', 'Forum', 'Author', 'Date'];
         $this->sql = $this->set_sql($cmids);
         $this->title = 'Most liked';
-        $this->countsql = $this->set_count_sql($cmids);
+//        $this->countsql = $this->set_count_sql($cmids);
     }
 
     /**

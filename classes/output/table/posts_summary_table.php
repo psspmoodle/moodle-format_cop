@@ -69,6 +69,25 @@ class posts_summary_table extends table_sql
         }
     }
 
+
+    /**
+     * Public static because it's also called from
+     *
+     * @return false|mixed
+     */
+    public function get_onerow()
+    {
+        global $DB;
+        return $DB->get_record_sql(
+        /** @lang sql */
+            "SELECT {$this->view->get_sql()['select']} 
+            FROM {$this->view->get_sql()['from']} 
+            WHERE {$this->view->get_sql()['where']}",
+            $this->view->get_sql()['params'],
+            IGNORE_MULTIPLE
+        );
+    }
+
     /**
      * The constructor is only ever called from within the factory methods above.
      *
@@ -199,6 +218,13 @@ class posts_summary_table extends table_sql
     {
         $this->define_columns($this->view->get_columns());
         $this->define_headers($this->view->get_headers());
-        parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
+        $this->pagesize = $pagesize;
+        $this->setup();
+        if ($this->get_onerow()) {
+            $this->query_db($pagesize, $useinitialsbar);
+            $this->build_table();
+            $this->close_recordset();
+        }
+        $this->finish_output();
     }
 }
