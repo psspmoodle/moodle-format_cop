@@ -66,15 +66,17 @@ class post_box_container implements renderable, templatable {
         $boxdata = new stdClass();
         $boxes = [];
         foreach ($this->tables as $table) {
-            if ($table->sql && $onerow = $table->get_onerow) {
+            if ($table->sql) {
                 $data = new stdClass();
                 $data->boxtitle = $table->view->get_title();
-                $table->define_columns(array_keys((array) $onerow));
-                $table->define_headers(array_keys((array) $onerow));
-                $table->setup();
-                $table->query_db(6, false);
-                $data->posts = array_values($this->prepare_postdata($table));
-                $data->morelink = count($table->rawdata) > 5 ? ($table->baseurl)->out(false) : '';
+                if ($onerow = $table->get_onerow()) {
+                    $table->define_columns(array_keys((array) $onerow));
+                    $table->define_headers(array_keys((array) $onerow));
+                    $table->setup();
+                    $table->query_db(6, false);
+                    $data->posts = array_values($this->prepare_postdata($table));
+                    $data->morelink = count($table->rawdata) > 5 ? ($table->baseurl)->out(false) : '';
+                }
                 $boxes[] = $data;
             }
         }
