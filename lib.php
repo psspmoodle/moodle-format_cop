@@ -82,6 +82,8 @@ class format_cop extends format_base {
 }
 
 /**
+ * Moodle callback for adding custom icons.
+ *
  * @return string[]
  */
 function format_cop_get_fontawesome_icon_map(): array
@@ -93,7 +95,7 @@ function format_cop_get_fontawesome_icon_map(): array
 }
 
 /**
- * Insert JS to alter post tag URLs
+ * Insert JS to alter post tag URLs.
  *
  * @return void
  */

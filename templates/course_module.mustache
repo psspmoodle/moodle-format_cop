@@ -1,30 +1,32 @@
 {{#visible}}
-<div class="content card mb-3">
-    <div class="row">
-        <div class="col-auto d-none d-md-inline">
+<div class="col-12 col-md-6 d-flex px-0 border-right">
+    <div class="row no-gutters border-bottom w-100">
+        {{#restrictions}}
+            <a tabindex="0"
+               class="btn p-0 mr-2 mt-1 restrict-access-lock position-absolute"
+               role="button" data-toggle="popover" data-trigger="focus" data-html="true" data-container="body"
+               data-content="{{restrictions.formattedinfo}}"
+               style="right: 0"
+            >
+                <i class="far fa-lock gray600" title="Click lock icon to view availability restrictions"></i>
+            </a>
+        {{/restrictions}}
+        <div class="col-3">
             <a href="{{url}}"><img class="cop-forum img-fluid" alt="{{name}} image" src="{{imgsrc}}"></a>
         </div>
-        <div class="col">
-            <div class="card-body d-flex flex-column pl-md-0">
-                {{#restrictions}}
-                <a tabindex="0"
-                   class="btn p-0 mr-2 mt-1 restrict-access-lock position-absolute"
-                   role="button" data-toggle="popover" data-trigger="focus" data-html="true" data-container="body"
-                   data-content="{{restrictions.formattedinfo}}"
-                    style="top: 0; right: 15px"
-                >
-                    <i class="far fa-lock gray600" title="Click lock icon to view availability restrictions"></i>
-                </a>
-                {{/restrictions}}
-                <h4 class="card-title"><a href="{{url}}">{{name}}</a>{{{coursemodedit}}}<span class="small">{{{afterlink}}}</span></h4>
-                <div class="card-text">{{{content}}}</div>
-                {{#featuredtitle}}
-                <div>
-                    <span class="d-block">Featured post: <a href="{{featuredurl}}"><strong>{{featuredtitle}}</strong></a></span>
+        <div class="col-9 p-3">
+            <div class="row no-gutters h-100">
+                <div class="col-12 d-flex justify-content-center flex-column">
+                    <h4><a href="{{url}}">{{name}}</a>{{{coursemodedit}}}<span class="small">{{{afterlink}}}</span></h4>
+                    {{#featuredtitle}}
+                        <div>
+                            <span class="d-block">Featured post: <a href="{{featuredurl}}"><strong>{{featuredtitle}}</strong></a></span>
+                        </div>
+                    {{/featuredtitle}}
                 </div>
-                {{/featuredtitle}}
             </div>
         </div>
     </div>
 </div>
 {{/visible}}
+

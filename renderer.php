@@ -100,10 +100,13 @@ class format_cop_renderer extends format_section_renderer_base
     private function print_course_modules($modinfo): string
     {
         $output = '';
+        $modules = [];
         foreach ($modinfo->get_cms() as $cm) {
-            $module = new course_module($cm, $this->courserenderer);
-            $output .= $this->courserenderer->render($module);
+            $modules[] = (new course_module($cm, $this->courserenderer))->export_for_template($this);
+//            $output .= $this->courserenderer->render($module);
         }
-        return $output;
+        $data = new stdClass;
+        $data->mods = $modules;
+        return $this->render_from_template('format_cop/course_module_wrapper', $data);
     }
 }

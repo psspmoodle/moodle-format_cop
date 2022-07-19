@@ -84,7 +84,6 @@ class course_module implements templatable, renderable
         $record = $DB->get_record($this->cm->modname, ['id' => $this->cm->instance]);
         $text = file_rewrite_pluginfile_urls($record->intro, 'pluginfile.php',
             $this->cm->context->id, 'mod_' . $this->cm->modname, 'intro', null);
-        $data->content = $text;
         $imgs = (util::open_domdocument($text))->getElementsByTagName('img');
         if ($imgs->length > 0) {
             $data->imgsrc = $imgs->item(0)->attributes->getNamedItem('src')->value;
